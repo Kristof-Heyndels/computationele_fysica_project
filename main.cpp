@@ -14,7 +14,7 @@ class Grid {
     int nr_rows_;
     int nr_cols_;
     std::valarray<int> matrix_;
-    std::vector<int, int> eligible_fields_;
+    std::unordered_map<int, int> eligible_fields_;
     void update_tile_weight(const int& pos) {
       if (matrix_[pos] != 9) {
         matrix_[pos]++;
@@ -104,7 +104,7 @@ int main(int argc, char* argv[]) {
     grid.populate_random_field();
   }
 
-  //std::cout << grid << "\n";
+  std::cout << grid << "\n";
 
   return 0;
 }
