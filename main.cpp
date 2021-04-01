@@ -65,11 +65,12 @@ class Grid {
       std::vector<int> positions = weighted_positions_list();
 
       mt19937_64 engine(create_random_seed());
-      auto rnd = bind(uniform_real_distribution<double>(0.0, positions.size()),engine);
+      auto rnd = bind(uniform_int_distribution<int>(0.0, positions.size()),engine);
 
+      auto random_index = rnd();
       position pos {
-        positions[rnd()] / nr_cols_,
-        positions[rnd()] % nr_cols_
+        positions[random_index] / nr_rows_,
+        positions[random_index] % nr_cols_
       };
       return pos;
     }
@@ -109,7 +110,7 @@ int main(int argc, char* argv[]) {
   init_grid(grid);
 
   //TODO: check why diagonal fields are counted as neighbours
-  for (int i = 0; i != t; ++i){
+  for (int i = 1; i != t; ++i){
     grid.populate_field(grid.rnd_eligible_field().row,  grid.rnd_eligible_field().col);
   }
 
