@@ -1,5 +1,5 @@
 #include <iostream>
-#include "grid.h"
+#include "grid.cpp"
 
 void init_grid(Grid& g) {
   int centre_row = g.nr_rows()/2;
