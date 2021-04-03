@@ -33,6 +33,7 @@ int main(int argc, char* argv[]) {
   }
 
   grid_print_cout(grid);
+  std::cout << "H:" << grid.calculate_hairiness() << "\n";
 
   return 0;
 }

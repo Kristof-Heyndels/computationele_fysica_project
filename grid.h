@@ -15,6 +15,7 @@ class Grid {
     int nr_cols_;
     std::valarray<int> matrix_;
     std::unordered_map<int, int> eligible_fields_;
+    int nr_occupied_fields_;
     
     void update_tile_weight(const int& pos);
     std::vector<int> weighted_positions_list();
@@ -29,6 +30,7 @@ class Grid {
     int rnd_eligible_field();
     void populate_field(const int& row, const int& col);
     void populate_random_field();
+    float calculate_hairiness();
 };
 
 std::ostream& operator<< (std::ostream& os, Grid& grid){

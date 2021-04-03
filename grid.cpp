@@ -4,6 +4,7 @@ Grid::Grid(const int nr_rows, const int nr_cols){
   nr_rows_ = nr_rows;
   nr_cols_ = nr_cols;
   matrix_ = std::valarray<int>(0, nr_rows*nr_cols);
+  nr_occupied_fields_ = 0;
 }
 
 void Grid::update_tile_weight(const int& pos) {
@@ -40,6 +41,7 @@ int Grid::rnd_eligible_field(){
 void Grid::populate_field(const int& row, const int& col){
   matrix_[nr_cols_*row + col] = 9;
   eligible_fields_.erase(nr_cols_*row + col);
+  nr_occupied_fields_++;
 
   if (row != 0) { update_tile_weight(nr_cols_*(row-1) + col); }
   if (col != 0) { update_tile_weight(nr_cols_*row + (col-1)); }
@@ -50,4 +52,15 @@ void Grid::populate_field(const int& row, const int& col){
 void Grid::populate_random_field(){
   auto rnd_field = rnd_eligible_field();
   populate_field(rnd_field / nr_cols_, rnd_field % nr_cols_);  
+}
+
+float Grid::calculate_hairiness(){
+  // Needs to be float so free_edges / nr_occupied_fields_ evaluates as a float
+  float free_edges {0};
+
+  for (auto& field: eligible_fields_) {
+  free_edges += field.second;
+  }
+
+  return free_edges / nr_occupied_fields_;
 }
