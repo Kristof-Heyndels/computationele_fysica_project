@@ -64,3 +64,7 @@ float Grid::calculate_hairiness(){
 
   return free_edges / nr_occupied_fields_;
 }
+
+Grid::Position Grid::find_centre_mass() {
+  return {0, 0};
+}

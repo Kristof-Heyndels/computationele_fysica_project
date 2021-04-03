@@ -22,6 +22,11 @@ class Grid {
     double create_random_seed();
 
   public:
+    struct Position{
+      int row;
+      int col;
+    };
+    
     Grid(const int nr_rows, const int nr_cols);
     int nr_rows() const { return nr_rows_; }
     int nr_cols() const { return nr_cols_; }
@@ -31,6 +36,7 @@ class Grid {
     void populate_field(const int& row, const int& col);
     void populate_random_field();
     float calculate_hairiness();
+    Position find_centre_mass();
 };
 
 std::ostream& operator<< (std::ostream& os, Grid& grid){
