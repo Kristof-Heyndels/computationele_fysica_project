@@ -47,6 +47,15 @@ class Grid {
     int& operator()(const int& row, const int& col) { return matrix_[nr_cols_*row + col]; }
     int eligible_fields_count() {return eligible_fields_.size(); }
 
+    int rnd_eligible_field() {
+      std::vector<int> positions = weighted_positions_list();
+
+      std::mt19937_64 engine(create_random_seed());
+      auto rnd = bind(std::uniform_int_distribution<int>(0.0, positions.size() - 1),engine);
+
+      return positions[rnd()];
+    }
+
     void populate_field(const int& row, const int& col){
       matrix_[nr_cols_*row + col] = 9;
       eligible_fields_.erase(nr_cols_*row + col);
@@ -55,15 +64,6 @@ class Grid {
       if (col != 0) { update_tile_weight(nr_cols_*row + (col-1)); }
       if (row != nr_rows_ - 1) {update_tile_weight(nr_cols_*(row+1) + col); }
       if (col != nr_cols_ - 1) { update_tile_weight(nr_cols_*row + (col+1)); }
-    }
-
-    int rnd_eligible_field() {
-      std::vector<int> positions = weighted_positions_list();
-
-      std::mt19937_64 engine(create_random_seed());
-      auto rnd = bind(std::uniform_int_distribution<int>(0.0, positions.size() - 1),engine);
-
-      return positions[rnd()];
     }
 
     void populate_random_field() {

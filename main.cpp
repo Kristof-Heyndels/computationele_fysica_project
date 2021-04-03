@@ -8,7 +8,7 @@ void init_grid(Grid& g) {
 }
 
 void grid_print_cout(Grid g){
-  // std::cout << g << "\n";
+  std::cout << g << "\n";
 }
 
 int main(int argc, char* argv[]) {
@@ -23,14 +23,13 @@ int main(int argc, char* argv[]) {
   Grid grid(n,n);
   init_grid(grid);
 
-  for (int i = 1; i != t; ++i){
+  for (int i = 0; i != t; ++i){
     if (grid.eligible_fields_count() == 0) 
     {
-      std::cout << "Grid full, exiting loop at t = " << i << "\n\n"; 
-      grid_print_cout(grid);
-      return 0;  
+      std::cout << "Grid full, exiting loop at t = " << i << "\n\n";
+      break;
     }
-    grid.populate_random_field();
+     grid.populate_random_field();
   }
 
   grid_print_cout(grid);
