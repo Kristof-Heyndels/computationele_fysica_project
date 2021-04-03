@@ -4,6 +4,7 @@
 #include <valarray>
 #include <vector>
 #include <unordered_map>
+#include <set>
 #include <random>
 #include <functional>
 
@@ -15,7 +16,7 @@ class Grid {
     int nr_cols_;
     std::valarray<int> matrix_;
     std::unordered_map<int, int> eligible_fields_;
-    int nr_occupied_fields_;
+    std::set<int> occupied_fields_;
     
     void update_tile_weight(const int& pos);
     std::vector<int> weighted_positions_list();

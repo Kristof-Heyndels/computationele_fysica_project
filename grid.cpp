@@ -4,7 +4,7 @@ Grid::Grid(const int nr_rows, const int nr_cols){
   nr_rows_ = nr_rows;
   nr_cols_ = nr_cols;
   matrix_ = std::valarray<int>(0, nr_rows*nr_cols);
-  nr_occupied_fields_ = 0;
+  occupied_fields_ = {};
 }
 
 void Grid::update_tile_weight(const int& pos) {
@@ -41,7 +41,7 @@ int Grid::rnd_eligible_field(){
 void Grid::populate_field(const int& row, const int& col){
   matrix_[nr_cols_*row + col] = 9;
   eligible_fields_.erase(nr_cols_*row + col);
-  nr_occupied_fields_++;
+  occupied_fields_.insert(nr_cols_*row + col);
 
   if (row != 0) { update_tile_weight(nr_cols_*(row-1) + col); }
   if (col != 0) { update_tile_weight(nr_cols_*row + (col-1)); }
@@ -62,7 +62,7 @@ float Grid::calculate_hairiness(){
   free_edges += field.second;
   }
 
-  return free_edges / nr_occupied_fields_;
+  return free_edges / occupied_fields_.size();
 }
 
 Grid::Position Grid::find_centre_mass() {
