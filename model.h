@@ -1,7 +1,7 @@
 #ifndef MODEL_H
 #define MODEL_H
 
-#include <unordered_map>
+#include <map>
 #include <set>
 #include <random>
 #include <functional>
@@ -22,14 +22,9 @@ class Model{
 
   private:
     Grid grid_;
-    //TODO would like to make this unordered_map<Position>
-    std::unordered_map<int, int> eligible_fields_;
+    std::map<Position, int> eligible_fields_;
     std::set<Position> occupied_fields_;
 
-    // double index to single index
-    int ditosi(const Model::Position& pos);
-    // single index to double index
-    Model::Position sitodi(const int& i);
     void update_tile_weight(const Position& pos);
     std::vector<Position> weighted_positions_list();
     Position rnd_eligible_field();

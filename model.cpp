@@ -2,18 +2,10 @@
 
 Model::Model(Grid& g) : grid_(g) {}
 
-int Model::ditosi(const Model::Position& pos){
-  return grid_.nr_cols()*pos.row + pos.col;
-}
-
-Model::Position Model::sitodi(const int& i){
-  return {i / grid_.nr_cols(), i % grid_.nr_cols()};
-}
-
 void Model::update_tile_weight(const Position& pos) {
   if (grid_(pos.row, pos.col) != 9) {
     grid_(pos.row, pos.col)++;
-    eligible_fields_[ditosi(pos)] = grid_(pos.row, pos.col);
+    eligible_fields_[pos] = grid_(pos.row, pos.col);
   }
 }
 
@@ -21,7 +13,7 @@ std::vector<Model::Position> Model::weighted_positions_list() {
   std::vector<Position> positions_list;
   for(auto& field: eligible_fields_) {
     for (int i = 1; i <= field.second; ++i){
-      positions_list.push_back(sitodi(field.first));
+      positions_list.push_back((field.first));
     }
   }
   return positions_list;
@@ -41,7 +33,7 @@ Model::Position Model::rnd_eligible_field(){
 
 void Model::populate_field(const Position& pos){
   grid_(pos.row, pos.col) = 9;
-  eligible_fields_.erase(ditosi(pos));
+  eligible_fields_.erase(pos);
   occupied_fields_.insert(pos);
 
   if (pos.row != 0) { update_tile_weight({pos.row-1, pos.col}); }
@@ -60,7 +52,7 @@ float Model::calculate_hairiness(){
   float free_edges {0};
 
   for (auto& field: eligible_fields_) {
-  free_edges += field.second;
+    free_edges += field.second;
   }
 
   return free_edges / occupied_fields_.size();
