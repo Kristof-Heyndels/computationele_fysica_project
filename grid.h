@@ -7,6 +7,7 @@
 #include <set>
 #include <random>
 #include <functional>
+#include <iostream>
 
 using seed_dist_t = std::uniform_int_distribution<size_t>;
 
@@ -33,7 +34,6 @@ class Grid {
     int ditosi(const int& row, const int& col);
     void update_tile_weight(const int& pos);
     std::vector<int> weighted_positions_list();
-    double create_random_seed();
     Carthesian_Position transform_position_to_carthesian(const Position& pos);
     
 
@@ -49,15 +49,4 @@ class Grid {
     float calculate_hairiness();
     Carthesian_Position find_centre_mass();
 };
-
-std::ostream& operator<< (std::ostream& os, Grid& grid){
-  for (int row = 0; row < grid.nr_rows(); ++row) {
-    for (int col = 0; col < grid.nr_cols(); ++ col) {
-      os << grid(row, col) << " ";
-    }
-    os << "\n";
-  }
-
-  return os;
-}
 #endif

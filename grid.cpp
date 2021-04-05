@@ -1,5 +1,4 @@
 #include "grid.h"
-#include <iostream>
 
 Grid::Grid(const int nr_rows, const int nr_cols){
   nr_rows_ = nr_rows;
@@ -8,10 +7,12 @@ Grid::Grid(const int nr_rows, const int nr_cols){
   occupied_fields_ = {};
 }
 
+// single index to double index
 Grid::Position Grid::sitodi(const int& index){
   return {index / nr_cols_, index % nr_cols_};
 }
 
+// double index to single index
 int Grid::ditosi(const int& row, const int& col){
   return nr_cols_*row + col;
 }
@@ -33,13 +34,6 @@ std::vector<int> Grid::weighted_positions_list() {
   return positions_list;
 }
 
-double Grid::create_random_seed(){
-  std::random_device dev;
-  seed_dist_t seed_distr(0, std::numeric_limits<size_t>::max());
-  auto seed = seed_distr(dev);
-  return seed;
-}
-
 Grid::Carthesian_Position Grid::transform_position_to_carthesian(const Grid::Position& pos){
   float x_offset = nr_cols_ / 2;
   float y_offset = nr_rows_ / 2;
@@ -49,8 +43,13 @@ Grid::Carthesian_Position Grid::transform_position_to_carthesian(const Grid::Pos
 
 int Grid::rnd_eligible_field(){
   std::vector<int> positions = weighted_positions_list();
-  std::mt19937_64 engine(create_random_seed());
+
+  std::random_device dev;
+  seed_dist_t seed_distr(0, std::numeric_limits<size_t>::max());
+  auto seed = seed_distr(dev);
+  std::mt19937_64 engine(seed);
   auto rnd = bind(std::uniform_int_distribution<int>(0.0, positions.size() - 1),engine);
+
   return positions[rnd()];
 }
 
@@ -87,9 +86,21 @@ Grid::Carthesian_Position Grid::find_centre_mass() {
   int n = occupied_fields_.size();
 
   for (auto& field: occupied_fields_){
+    // A CoM only makes sense if you convert to contineous carthesian coordiantes (lim surface field -> 0)
     Carthesian_Position c_pos = transform_position_to_carthesian(sitodi(field));
     centre_mass_x += c_pos.x;
     centre_mass_y += c_pos.y;
   }
   return {(centre_mass_x / n),(centre_mass_y / n)};
+}
+
+std::ostream& operator<< (std::ostream& os, Grid& grid){
+  for (int row = 0; row < grid.nr_rows(); ++row) {
+    for (int col = 0; col < grid.nr_cols(); ++ col) {
+      os << grid(row, col) << " ";
+    }
+    os << "\n";
+  }
+
+  return os;
 }
