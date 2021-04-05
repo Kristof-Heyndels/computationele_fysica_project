@@ -14,11 +14,15 @@ class Model{
     struct Position{
       int row;
       int col;
+
+      Position(int r=0, int c=0) : row(r), col(c) {}
+      bool operator==(const Position& a) const { return (row == a.row && col == a.col); }
+      bool operator<(const Position& a) const { return (row < a.row && col < a.col); }
     };
 
   private:
     Grid grid_;
-    //TODO would like to make these unordered_map<Position
+    //TODO would like to make this unordered_map<Position>
     std::unordered_map<int, int> eligible_fields_;
     std::set<Position> occupied_fields_;
 

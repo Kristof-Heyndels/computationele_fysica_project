@@ -2,11 +2,6 @@
 
 Model::Model(Grid& g) : grid_(g) {}
 
-// overloading < operator for Position
-bool operator<(const Model::Position& a, const Model::Position& b) {
-  return (a.row < b.row) && (a.col < b.col);
-}
-
 int Model::ditosi(const Model::Position& pos){
   return grid_.nr_cols()*pos.row + pos.col;
 }
