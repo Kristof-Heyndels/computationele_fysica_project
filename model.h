@@ -20,6 +20,7 @@ class Model{
     Grid grid_;
     //TODO would like to make these unordered_map<Position, int> and set<Position>
     std::unordered_map<int, int> eligible_fields_;
+    
     std::set<int> occupied_fields_;
 
     // double index to single index
