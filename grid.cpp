@@ -7,12 +7,10 @@ Grid::Grid(const int nr_rows, const int nr_cols){
   occupied_fields_ = {};
 }
 
-// single index to double index
 Grid::Position Grid::sitodi(const int& index){
   return {index / nr_cols_, index % nr_cols_};
 }
 
-// double index to single index
 int Grid::ditosi(const int& row, const int& col){
   return nr_cols_*row + col;
 }
@@ -33,13 +31,6 @@ std::vector<int> Grid::weighted_positions_list() {
   }
   return positions_list;
 }
-
-Grid::Position Grid::transform_position_to_carthesian(const Grid::Position& pos){
-  int x_offset = nr_cols_ / 2;
-  int y_offset = nr_rows_ / 2;
-  return {pos.col - x_offset, -1 * (pos.row - y_offset)};
-}
-
 
 int Grid::rnd_eligible_field(){
   std::vector<int> positions = weighted_positions_list();
@@ -86,7 +77,6 @@ Grid::Position Grid::find_centre_mass() {
   int n = occupied_fields_.size();
 
   for (auto& field: occupied_fields_){
-    // A CoM only makes sense if you convert to contineous carthesian coordiantes (lim surface field -> 0)
     Position pos = sitodi(field);
     centre_mass_row += pos.row;
     centre_mass_col += pos.col;
