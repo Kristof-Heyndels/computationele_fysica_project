@@ -2,6 +2,11 @@
 
 Model::Model(Grid& g) : grid_(g) {}
 
+// overloading < operator for Position
+bool operator<(const Model::Position& a, const Model::Position& b) {
+  return (a.row < b.row) && (a.col < b.col);
+}
+
 int Model::ditosi(const Model::Position& pos){
   return grid_.nr_cols()*pos.row + pos.col;
 }
@@ -42,7 +47,7 @@ Model::Position Model::rnd_eligible_field(){
 void Model::populate_field(const Position& pos){
   grid_(pos.row, pos.col) = 9;
   eligible_fields_.erase(ditosi(pos));
-  occupied_fields_.insert(ditosi(pos));
+  occupied_fields_.insert(pos);
 
   if (pos.row != 0) { update_tile_weight({pos.row-1, pos.col}); }
   if (pos.col != 0) { update_tile_weight({pos.row, pos.col-1}); }
@@ -72,9 +77,8 @@ Model::Position Model::find_centre_mass() {
   int n = occupied_fields_.size();
 
   for (auto& field: occupied_fields_){
-    Position pos = sitodi(field);
-    centre_mass_row += pos.row;
-    centre_mass_col += pos.col;
+    centre_mass_row += field.row;
+    centre_mass_col += field.col;
   }
   return {(centre_mass_row / n),(centre_mass_col / n)};
 }

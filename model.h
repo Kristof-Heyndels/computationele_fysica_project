@@ -18,9 +18,9 @@ class Model{
 
   private:
     Grid grid_;
-    //TODO would like to make these unordered_map<Position, int> and set<Position>
+    //TODO would like to make these unordered_map<Position
     std::unordered_map<int, int> eligible_fields_;
-    std::set<int> occupied_fields_;
+    std::set<Position> occupied_fields_;
 
     // double index to single index
     int ditosi(const Model::Position& pos);
