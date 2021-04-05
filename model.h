@@ -1,7 +1,7 @@
 #ifndef MODEL_H
 #define MODEL_H
 
-#include <map>
+#include <unordered_map>
 #include <set>
 #include <random>
 #include <functional>
@@ -14,34 +14,32 @@ class Model{
     struct Position{
       int row;
       int col;
-
-      Position(int r=0, int c=0) : row(r), col(c) {}
-      bool operator==(const Position& a) const { return (row == a.row && col == a.col); }
-      bool operator<(const Position& a) const { return (row < a.row && col < a.col); }
     };
 
   private:
     Grid grid_;
     //TODO would like to make these unordered_map<Position, int> and set<Position>
-    std::unordered_map<int, int> eligible_fields_;    
+    std::unordered_map<int, int> eligible_fields_;
     std::set<int> occupied_fields_;
 
     // double index to single index
     int ditosi(const Model::Position& pos);
     // single index to double index
     Model::Position sitodi(const int& i);
+    
     void update_tile_weight(const Position& pos);
     std::vector<Position> weighted_positions_list();
     Position rnd_eligible_field();
 
   public:
-    Model(Grid& g);
+    Model(int dim = 3) : grid_(dim,dim){}
     Grid grid() {return grid_; }
     int eligible_fields_count() {return eligible_fields_.size(); }
     void populate_field(const Position& pos);
     void populate_random_field();
     float calculate_hairiness();
     Position find_centre_mass();
+    int calculate_inner_radius(const Position& com);
 };
 
 #endif

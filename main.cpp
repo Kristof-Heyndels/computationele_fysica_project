@@ -8,6 +8,7 @@ void init_model(Model& m) {
   m.populate_field({centre_row, centre_col});
 }
 
+// why can I not do Grid& g?
 void grid_print_cout(Grid g){
   std::cout << g << "\n";
 }
@@ -21,8 +22,7 @@ int main(int argc, char* argv[]) {
   int n = std::stoi(argv[1]);
   int t = std::stoi(argv[2]);
 
-  Grid grid(n, n);
-  Model model(grid);
+  Model model(n);
   init_model(model);
 
   for (int i = 0; i != t; ++i){
@@ -36,9 +36,9 @@ int main(int argc, char* argv[]) {
   grid_print_cout(model.grid());
   std::cout << "H: " << model.calculate_hairiness() << "\n";
   Model::Position centre_of_mass = model.find_centre_mass();
-  std::cout << "CoM: \n x = " 
-            << centre_of_mass.row << "\n y = " 
+  std::cout << "CoM: \n row = " 
+            << centre_of_mass.row << "\n col = " 
             << centre_of_mass.col << "\n";
-
+  std::cout << "Inner Radius: " << model.calculate_inner_radius(centre_of_mass) << "\n";
   return 0;
 }
