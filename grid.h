@@ -34,7 +34,7 @@ class Grid {
     int ditosi(const int& row, const int& col);
     void update_tile_weight(const int& pos);
     std::vector<int> weighted_positions_list();
-    Carthesian_Position transform_position_to_carthesian(const Position& pos);
+    Position transform_position_to_carthesian(const Position& pos);
     
 
   public:    
@@ -47,6 +47,6 @@ class Grid {
     void populate_field(const int& row, const int& col);
     void populate_random_field();
     float calculate_hairiness();
-    Carthesian_Position find_centre_mass();
+    Position find_centre_mass();
 };
 #endif

@@ -34,10 +34,10 @@ int main(int argc, char* argv[]) {
 
   grid_print_cout(grid);
   std::cout << "H: " << grid.calculate_hairiness() << "\n";
-  Grid::Carthesian_Position centre_of_mass = grid.find_centre_mass();
+  Grid::Position centre_of_mass = grid.find_centre_mass();
   std::cout << "CoM: \n x = " 
-            << centre_of_mass.x << "\n y = " 
-            << centre_of_mass.y << "\n";
+            << centre_of_mass.row << "\n y = " 
+            << centre_of_mass.col << "\n";
 
   return 0;
 }

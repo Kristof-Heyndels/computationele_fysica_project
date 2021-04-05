@@ -34,9 +34,9 @@ std::vector<int> Grid::weighted_positions_list() {
   return positions_list;
 }
 
-Grid::Carthesian_Position Grid::transform_position_to_carthesian(const Grid::Position& pos){
-  float x_offset = nr_cols_ / 2;
-  float y_offset = nr_rows_ / 2;
+Grid::Position Grid::transform_position_to_carthesian(const Grid::Position& pos){
+  int x_offset = nr_cols_ / 2;
+  int y_offset = nr_rows_ / 2;
   return {pos.col - x_offset, -1 * (pos.row - y_offset)};
 }
 
@@ -80,18 +80,18 @@ float Grid::calculate_hairiness(){
   return free_edges / occupied_fields_.size();
 }
 
-Grid::Carthesian_Position Grid::find_centre_mass() {
-  float centre_mass_x  {0};
-  float centre_mass_y {0};
+Grid::Position Grid::find_centre_mass() {
+  int centre_mass_row  {0};
+  int centre_mass_col {0};
   int n = occupied_fields_.size();
 
   for (auto& field: occupied_fields_){
     // A CoM only makes sense if you convert to contineous carthesian coordiantes (lim surface field -> 0)
-    Carthesian_Position c_pos = transform_position_to_carthesian(sitodi(field));
-    centre_mass_x += c_pos.x;
-    centre_mass_y += c_pos.y;
+    Position pos = sitodi(field);
+    centre_mass_row += pos.row;
+    centre_mass_col += pos.col;
   }
-  return {(centre_mass_x / n),(centre_mass_y / n)};
+  return {(centre_mass_row / n),(centre_mass_col / n)};
 }
 
 std::ostream& operator<< (std::ostream& os, Grid& grid){
