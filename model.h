@@ -5,6 +5,7 @@
 #include <set>
 #include <random>
 #include <functional>
+#include <cmath>
 #include "grid.h"
 
 using seed_dist_t = std::uniform_int_distribution<size_t>;
@@ -30,6 +31,8 @@ class Model{
     void update_tile_weight(const Position& pos);
     std::vector<Position> weighted_positions_list();
     Position rnd_eligible_field();
+    int pow_2(int x) { return x*x; }
+    int distance(const Position& p1, const Position& p2) {return std::sqrt(pow_2(p1.row - p2.row)) + sqrt(pow_2(p1.col - p2.col));}
 
   public:
     Model(int dim = 3) : grid_(dim,dim){}
@@ -37,9 +40,11 @@ class Model{
     int eligible_fields_count() {return eligible_fields_.size(); }
     void populate_field(const Position& pos);
     void populate_random_field();
-    float calculate_hairiness();
-    Position find_centre_mass();
-    float calculate_inner_radius(const Position& com);
+    float hairiness();
+    Position centre_mass();
+    int inner_radius(const Position& com);
+    int outer_radius(const Position& com);
+    float density() { return occupied_fields_.size() / (M_PI * pow_2(outer_radius(centre_mass()))); }
 };
 
 #endif
