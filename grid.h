@@ -10,15 +10,12 @@ class Grid {
     int nr_rows_;
     int nr_cols_;
     std::valarray<int> matrix_;
-    
-    // double index to single index
-    int ditosi(const int& row, const int& col);   
 
-  public:    
+  public:          
     Grid(const int& nr_rows, const int& nr_cols);
     int nr_rows() const { return nr_rows_; }
     int nr_cols() const { return nr_cols_; }
-    int& operator()(const int& row, const int& col) { return matrix_[ditosi(row, col)]; }
+    int& operator()(const int row, const int col) { return matrix_[nr_cols_*row + col]; }
 };
 
 #endif

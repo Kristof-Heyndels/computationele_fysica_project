@@ -18,18 +18,20 @@ class Model{
 
   private:
     Grid grid_;
-    std::unordered_map<Model::Position, int> eligible_fields_;
-    std::set<Model::Position> occupied_fields_;
+    //TODO would like to make these unordered_map<Position, int> and set<Position>
+    std::unordered_map<int, int> eligible_fields_;
+    std::set<int> occupied_fields_;
 
+    // double index to single index
+    int ditosi(const Model::Position& pos);
+    // single index to double index
+    Model::Position sitodi(const int& i);
     void update_tile_weight(const Position& pos);
     std::vector<Position> weighted_positions_list();
     Position rnd_eligible_field();
 
   public:
-    Model(Grid& g) : 
-      grid_(g),
-      eligible_fields_ {},
-      occupied_fields_ {} {}
+    Model(Grid& g);
     Grid grid() {return grid_; }
     int eligible_fields_count() {return eligible_fields_.size(); }
     void populate_field(const Position& pos);

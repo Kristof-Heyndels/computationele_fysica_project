@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
   int n = std::stoi(argv[1]);
   int t = std::stoi(argv[2]);
 
-  Grid grid(5,5);
+  Grid grid(n, n);
   Model model(grid);
   init_model(model);
 
@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
      model.populate_random_field();
   }
 
-  grid_print_cout(grid);
+  grid_print_cout(model.grid());
   std::cout << "H: " << model.calculate_hairiness() << "\n";
   Model::Position centre_of_mass = model.find_centre_mass();
   std::cout << "CoM: \n x = " 
