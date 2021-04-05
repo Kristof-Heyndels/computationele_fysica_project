@@ -15,7 +15,7 @@ class Model{
       int row;
       int col;
     };
-
+    
   private:
     Grid grid_;
     //TODO would like to make these unordered_map<Position, int> and set<Position>
@@ -39,7 +39,7 @@ class Model{
     void populate_random_field();
     float calculate_hairiness();
     Position find_centre_mass();
-    int calculate_inner_radius(const Position& com);
+    float calculate_inner_radius(const Position& com);
 };
 
 #endif

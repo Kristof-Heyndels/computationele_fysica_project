@@ -77,16 +77,15 @@ Model::Position Model::find_centre_mass() {
   return {(centre_mass_row / n),(centre_mass_col / n)};
 }
 
-int Model::calculate_inner_radius(const Position& com){
+float Model::calculate_inner_radius(const Position& com){
   for (int r = 1; r <= std::min(grid_.nr_cols() / 2, grid_.nr_rows() / 2); ++r) {
     for (int i = 1; i <= r; ++i) {
       for (int j = 1; j <= i; ++j) {
         if (grid_(com.row + i, com.col + j) != 9 || grid_(com.row - i, com.col - j) != 9) {
-          return r - 1; 
+          return (r - 1 + 0.5);
         }
       }      
     }
-    return r;
   }
-  return -1;
+  return std::min(grid_.nr_cols() / 2, grid_.nr_rows() / 2) + 0.5;
 }
