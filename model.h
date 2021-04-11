@@ -19,7 +19,7 @@ class Model{
     
   private:
     Grid grid_;
-    //TODO would like to make these unordered_map<Position, int> and set<Position>
+    // TODO would like to make these unordered_map<Position, int> and set<Position>
     std::unordered_map<int, int> eligible_fields_;
     std::set<int> occupied_fields_;
 
@@ -41,6 +41,8 @@ class Model{
     void populate_field(const Position& pos);
     void populate_random_field();
     float hairiness();
+    // TODO Centre of Mass as integer index.... makes sense? (My guess: no)
+    // TODO ask for more details
     Position centre_mass();
     int inner_radius(const Position& com);
     int outer_radius(const Position& com);
