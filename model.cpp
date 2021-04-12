@@ -74,30 +74,32 @@ Model::Position Model::centre_mass() {
     centre_mass_row += pos.row;
     centre_mass_col += pos.col;
   }
+  
   return {(centre_mass_row / n),(centre_mass_col / n)};
 }
 
-int Model::inner_radius(const Position& com){
-  for (int r = 1; r <= std::min(grid_.nr_cols() / 2, grid_.nr_rows() / 2); ++r) {
+float Model::inner_radius(const Position& com){
+  int max_r_row = grid_.nr_rows() / 2;
+  int max_r_col = grid_.nr_cols() / 2;
+
+  for (int r = 1; r <= std::min(max_r_row, max_r_col); ++r) {
     for (int i = 1; i <= r; ++i) {
       for (int j = 1; j <= i; ++j) {
         if (grid_(com.row + i, com.col + j) != 9 || grid_(com.row - i, com.col - j) != 9) {
-          return (r - 1);
+          return (r - 1) + 0.5;
         }
       }      
     }
   }
-  return std::min(grid_.nr_cols() / 2, grid_.nr_rows() / 2);
+  return std::min(max_r_row, max_r_col) + 0.5;
 }
 
-int Model::outer_radius(const Position& com){
-  if (occupied_fields_.size() == 1 ) {return 1;}
-
-  int dist {0};
+float Model::outer_radius(const Position& com){
+  float dist {0.0};
   for (auto& field: occupied_fields_){
     Position pos = sitodi(field);
     auto _dist = distance(com, pos);
     if (_dist > dist) { dist = _dist; }
   }
-  return dist;
+  return dist + sqrt(pow_2(0.5) + pow_2(0.5));
 }
