@@ -1,10 +1,10 @@
 #include "model.h"
 
-int Model::ditosi(const Model::Position& pos){
+int Model::ditosi(const Position& pos){
   return grid_.nr_cols()*pos.row + pos.col;
 }
 
-Model::Position Model::sitodi(const int& i){
+Position Model::sitodi(const int& i){
   return {i / grid_.nr_cols(), i % grid_.nr_cols()};
 }
 
@@ -15,7 +15,7 @@ void Model::update_tile_weight(const Position& pos) {
   }
 }
 
-std::vector<Model::Position> Model::weighted_positions_list() {
+std::vector<Position> Model::weighted_positions_list() {
   std::vector<Position> positions_list;
   for(auto& field: eligible_fields_) {
     for (int i = 1; i <= field.second; ++i){
@@ -25,7 +25,7 @@ std::vector<Model::Position> Model::weighted_positions_list() {
   return positions_list;
 }
 
-Model::Position Model::rnd_eligible_field(){
+Position Model::rnd_eligible_field(){
   std::vector<Position> positions = weighted_positions_list();
 
   std::random_device dev;
@@ -40,8 +40,8 @@ Model::Position Model::rnd_eligible_field(){
 void Model::populate_field(const Position& pos){
   grid_(pos.row, pos.col) = 9;
   eligible_fields_.erase(ditosi(pos));
-  occupied_fields_.insert(ditosi(pos));
-
+  occupied_fields_.insert(pos);
+  
   if (pos.row != 0) { update_tile_weight({pos.row-1, pos.col}); }
   if (pos.col != 0) { update_tile_weight({pos.row, pos.col-1}); }
   if (pos.row != grid_.nr_rows() - 1) { update_tile_weight({pos.row+1, pos.col}); }
@@ -58,21 +58,20 @@ float Model::hairiness(){
   float free_edges {0};
 
   for (auto& field: eligible_fields_) {
-  free_edges += field.second;
+    free_edges += field.second;
   }
 
   return free_edges / occupied_fields_.size();
 }
 
-Model::Position Model::centre_mass() {
+Position Model::centre_mass() {
   int centre_mass_row  {0};
   int centre_mass_col {0};
   int n = occupied_fields_.size();
 
   for (auto& field: occupied_fields_){
-    Position pos = sitodi(field);
-    centre_mass_row += pos.row;
-    centre_mass_col += pos.col;
+    centre_mass_row += field.row;
+    centre_mass_col += field.col;
   }
   
   return {(centre_mass_row / n),(centre_mass_col / n)};
@@ -97,9 +96,13 @@ float Model::inner_radius(const Position& com){
 float Model::outer_radius(const Position& com){
   float dist {0.0};
   for (auto& field: occupied_fields_){
-    Position pos = sitodi(field);
-    auto _dist = distance(com, pos);
+    auto _dist = distance(com, field);
     if (_dist > dist) { dist = _dist; }
   }
   return dist + sqrt(pow_2(0.5) + pow_2(0.5));
+}
+
+float Model::density(){ 
+  float area_outer_circle = M_PI * pow_2(outer_radius(centre_mass()));
+  return occupied_fields_.size() / ( area_outer_circle);
 }

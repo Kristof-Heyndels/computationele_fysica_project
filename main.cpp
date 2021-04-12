@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
 
   model.grid_print_cout();
   std::cout << "H: " << model.hairiness() << "\n";
-  Model::Position centre_of_mass = model.centre_mass();
+  Position centre_of_mass = model.centre_mass();
   std::cout << "CoM: \n row = " 
             << centre_of_mass.row << "\n col = " 
             << centre_of_mass.col << "\n";
