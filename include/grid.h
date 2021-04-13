@@ -3,6 +3,8 @@
 
 #include <valarray>
 
+//Data structure used to display the model
+
 class Grid {
   private:
     int nr_rows_;

@@ -27,12 +27,12 @@ int main(int argc, char* argv[]) {
      model.populate_random_field();
   }
 
-  model.grid_print_cout();
+  model.print_grid();
   std::cout << "H: " << model.hairiness() << "\n";
   Position centre_of_mass = model.centre_mass();
-  std::cout << "CoM: \n row = " 
-            << centre_of_mass.row << "\n col = " 
-            << centre_of_mass.col << "\n";
+  std::cout << "CoM: \n" 
+            << " row = " << centre_of_mass.row << "\n"
+            << " col = " << centre_of_mass.col << "\n";
   std::cout << "Inner Radius: " << model.inner_radius(centre_of_mass) << "\n";
   std::cout << "Outer Radius: " << model.outer_radius(centre_of_mass) << "\n";
   std::cout << "Density: " << model.density() << "\n";
