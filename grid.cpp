@@ -1,4 +1,5 @@
 #include "grid.h"
+#include <iostream>
 
 Grid::Grid(const int& nr_rows, const int& nr_cols){
   nr_rows_ = nr_rows;

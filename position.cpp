@@ -1,7 +1,7 @@
 #include "position.h"
 #include <iostream>
 
-bool operator< (const Position& p1, const Position& p2) {
+bool operator< (const Position p1, const Position& p2) {
   if (p1.row < p2.row) {return 1;}
   if (p1.row == p2.row && p1.col < p2.col) {return 1;}
   return 0;

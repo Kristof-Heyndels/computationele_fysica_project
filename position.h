@@ -19,4 +19,4 @@ struct Position{
   };
 };
 
-#endif  
+#endif

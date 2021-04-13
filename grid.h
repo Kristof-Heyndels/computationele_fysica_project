@@ -2,8 +2,6 @@
 #define GRID_H
 
 #include <valarray>
-#include <vector>
-#include <iostream>
 
 class Grid {
   private:
