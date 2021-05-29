@@ -42,6 +42,8 @@ void Model::populate_field(const Position& pos){
   if (pos.col != 0) {update_field_weight({pos.row, pos.col-1});}
   if (pos.row != grid_.nr_rows() - 1) {update_field_weight({pos.row+1, pos.col});}
   if (pos.col != grid_.nr_cols() - 1) {update_field_weight({pos.row, pos.col+1});}
+
+  invalidate_buffers();
 }
 
 void Model::populate_random_field(){
@@ -50,6 +52,9 @@ void Model::populate_random_field(){
 }
 
 float Model::hairiness(){
+  
+  if (g_hair_ != -1) { return g_hair_ ; }
+
   // Needs to be float so free_edges / nr_occupied_fields_ evaluates as a float
   float free_edges {0};
 
@@ -57,10 +62,13 @@ float Model::hairiness(){
     free_edges += field.second;
   }
 
-  return free_edges / occupied_fields_.size();
+  g_hair_ = free_edges / occupied_fields_.size();
+  return g_hair_;
 }
 
 Position Model::centre_mass() {
+  if (g_com_.row != -1 && g_com_.col != -1) { return g_com_ ; }
+
   int centre_mass_row  {0};
   int centre_mass_col {0};
   int n = occupied_fields_.size();
@@ -70,37 +78,40 @@ Position Model::centre_mass() {
     centre_mass_col += field.col;
   }
   
-  return {(centre_mass_row / n),(centre_mass_col / n)};
+  g_com_ = {(centre_mass_row / n),(centre_mass_col / n)};
+  return g_com_;
 }
 
-float Model::inner_radius(const Position& com){
-  int max_r_row = grid_.nr_rows() / 2;
-  int max_r_col = grid_.nr_cols() / 2;
+std::tuple<float, float> Model::inner_outer_radius(const Position& com){
 
-  // Looks for the largest fully populated square region, limited by the largest 
-  // possible square as defined by the grid size
-  for (int r = 1; r <= std::min(max_r_row, max_r_col); ++r) {
-    for (int i = 1; i <= r; ++i) {
-      for (int j = 1; j <= i; ++j) {
-        if (grid_(com.row + i, com.col + j) != 9 || grid_(com.row - i, com.col - j) != 9) {
-          return (r - 1) + 0.5;
-        }
-      }
-    }
-  }
-  return std::min(max_r_row, max_r_col) + 0.5;
-}
+  if(g_inner_ != -1 && g_outer_ != -1) { return {g_inner_,g_outer_}; }
 
-float Model::outer_radius(const Position& com){
-  float dist {0.0};
-  for (auto& field: occupied_fields_){
-    auto _dist = distance(com, field);
-    if (_dist > dist) { dist = _dist; }
+  float nearest_eligible_field = std::max(grid_.nr_cols(), grid_.nr_rows());
+  float furthest_eligible_field {0.0};
+
+  for (auto& field: eligible_fields_){
+    auto _dist = distance(com, field.first);
+    if (_dist < nearest_eligible_field) { nearest_eligible_field = _dist; }
+    if (_dist > furthest_eligible_field) { furthest_eligible_field = _dist; }
   }
-  return dist + sqrt(pow_2(0.5) + pow_2(0.5));
+
+  g_inner_ = nearest_eligible_field;
+  g_outer_ = furthest_eligible_field;
+  return {g_inner_, g_outer_};
 }
 
 float Model::density(){ 
+
+  if (g_density_ != -1) { return g_density_; }
+
   float area_outer_circle = M_PI * pow_2(outer_radius(centre_mass()));
   return occupied_fields_.size() / ( area_outer_circle);
+}
+
+void Model::invalidate_buffers(){
+  g_hair_ = -1;
+  g_com_ = {-1,-1};
+  g_inner_ = -1;
+  g_outer_ = -1;
+  g_density_ = -1;
 }
